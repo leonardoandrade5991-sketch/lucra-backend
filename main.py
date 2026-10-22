@@ -1,41 +1,52 @@
 
 import os
-import secrets
 import httpx
+from fastapi import FastAPI, HTTPException
 from supabase import create_client
 
 supabase = create_client(
     os.environ["SUPABASE_URL"],
     os.environ["SUPABASE_SECRET_KEY"]
 )
-from fastapi import FastAPI, Request, HTTPException
+
+NUVEMSHOP_CLIENT_ID = os.environ["NUVEMSHOP_CLIENT_ID"]
+NUVEMSHOP_CLIENT_SECRET = os.environ["NUVEMSHOP_CLIENT_SECRET"]
 
 app = FastAPI(
     title="LUCRA API",
-    version="0.1.0"
+    version="0.2.0"
 )
+
 
 @app.get("/")
 def home():
     return {
         "sistema": "LUCRA",
         "status": "online",
-        "versao": "0.1.0"
+        "versao": "0.2.0"
     }
+
 
 @app.get("/healthz")
 def health_check():
     return {"status": "ok"}
 
 
-@app.get("/nuvemshop/callback")
-async def nuvemshop_callback(code: str, state: str | None = None):
-    return {
-        "sistema": "LUCRA",
-        "integracao": "Nuvemshop",
-        "status": "codigo_recebido"
-    }
+@app.get("/supabase/status")
+def supabase_status():
+    try:
+        supabase.table("lojas").select("id").limit(1).execute()
 
+        return {
+            "sistema": "LUCRA",
+            "banco": "Supabase",
+            "conexao": "funcionando"
+        }
+    except Exception:
+        raise HTTPException(
+            status_code=503,
+            detail="Falha na conexao com o banco de dados"
+        )
 
 
 @app.get("/nuvemshop/status")
@@ -44,27 +55,65 @@ def nuvemshop_status():
         "sistema": "LUCRA",
         "integracao": "Nuvemshop",
         "callback": "configurado",
-        "autenticacao": "pendente"
+        "autenticacao": "habilitada_para_teste"
     }
 
-@app.get("/supabase/status")
-def supabase_status():
+
+@app.get("/nuvemshop/callback")
+async def nuvemshop_callback(code: str):
     try:
-        resposta = (
-            supabase.table("lojas")
-            .select("id")
-            .limit(1)
-            .execute()
-        )
+        async with httpx.AsyncClient(timeout=20.0) as client:
+            resposta = await client.post(
+                "https://www.nuvemshop.com/apps/authorize/token",
+                json={
+                    "client_id": NUVEMSHOP_CLIENT_ID,
+                    "client_secret": NUVEMSHOP_CLIENT_SECRET,
+                    "grant_type": "authorization_code",
+                    "code": code
+                }
+            )
+
+        if resposta.status_code != 200:
+            raise HTTPException(
+                status_code=502,
+                detail="Nao foi possivel autorizar a loja na Nuvemshop"
+            )
+
+        dados = resposta.json()
+        token = dados.get("access_token")
+        store_id = dados.get("user_id")
+
+        if not token or not store_id:
+            raise HTTPException(
+                status_code=502,
+                detail="Resposta de autorizacao incompleta"
+            )
+
+        supabase.table("nuvemshop_integracoes").upsert(
+            {
+                "store_id": int(store_id),
+                "access_token": token,
+                "scope": str(dados.get("scope") or ""),
+            },
+            on_conflict="store_id"
+        ).execute()
+
         return {
             "sistema": "LUCRA",
-            "banco": "Supabase",
-            "conexao": "funcionando"
+            "integracao": "Nuvemshop",
+            "status": "loja_conectada",
+            "store_id": store_id
         }
-        
-    except Exception as e:
-        print(f"Erro Supabase: {type(e).__name__}: {e}", flush=True)
+
+    except HTTPException:
+        raise
+    except httpx.RequestError:
+        raise HTTPException(
+            status_code=502,
+            detail="Falha de comunicacao com a Nuvemshop"
+        )
+    except Exception:
         raise HTTPException(
             status_code=503,
-            detail="Falha na conexão com o banco de dados"
+            detail="Falha ao concluir a integracao"
         )
