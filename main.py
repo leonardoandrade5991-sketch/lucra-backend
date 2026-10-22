@@ -64,7 +64,7 @@ async def nuvemshop_callback(code: str):
     try:
         async with httpx.AsyncClient(timeout=20.0) as client:
             resposta = await client.post(
-                "https://www.nuvemshop.com/apps/authorize/token",
+                "https://www.nuvemshop.com.br/apps/authorize/token",
                 json={
                     "client_id": NUVEMSHOP_CLIENT_ID,
                     "client_secret": NUVEMSHOP_CLIENT_SECRET,
