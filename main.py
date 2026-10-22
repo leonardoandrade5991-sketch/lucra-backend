@@ -46,3 +46,23 @@ def nuvemshop_status():
         "callback": "configurado",
         "autenticacao": "pendente"
     }
+
+@app.get("/supabase/status")
+def supabase_status():
+    try:
+        resposta = (
+            supabase.table("lojas")
+            .select("id")
+            .limit(1)
+            .execute()
+        )
+        return {
+            "sistema": "LUCRA",
+            "banco": "Supabase",
+            "conexao": "funcionando"
+        }
+    except Exception:
+        raise HTTPException(
+            status_code=503,
+            detail="Falha na conexão com o banco de dados"
+        )
