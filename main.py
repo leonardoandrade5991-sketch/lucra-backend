@@ -1,5 +1,9 @@
 
-from fastapi import FastAPI, Request
+import os
+import secrets
+import httpx
+
+from fastapi import FastAPI, Request, HTTPException
 
 app = FastAPI(
     title="LUCRA API",
