@@ -1,5 +1,5 @@
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 
 app = FastAPI(
     title="LUCRA API",
@@ -17,3 +17,12 @@ def home():
 @app.get("/healthz")
 def health_check():
     return {"status": "ok"}
+
+
+@app.get("/nuvemshop/callback")
+async def nuvemshop_callback(code: str, state: str | None = None):
+    return {
+        "sistema": "LUCRA",
+        "integracao": "Nuvemshop",
+        "status": "codigo_recebido"
+    }
