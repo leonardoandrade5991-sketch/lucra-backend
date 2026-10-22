@@ -61,7 +61,9 @@ def supabase_status():
             "banco": "Supabase",
             "conexao": "funcionando"
         }
-    except Exception:
+        
+    except Exception as e:
+        print(f"Erro Supabase: {type(e).__name__}: {e}", flush=True)
         raise HTTPException(
             status_code=503,
             detail="Falha na conexão com o banco de dados"
