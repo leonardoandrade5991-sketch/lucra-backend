@@ -26,3 +26,14 @@ async def nuvemshop_callback(code: str, state: str | None = None):
         "integracao": "Nuvemshop",
         "status": "codigo_recebido"
     }
+
+
+
+@app.get("/nuvemshop/status")
+def nuvemshop_status():
+    return {
+        "sistema": "LUCRA",
+        "integracao": "Nuvemshop",
+        "callback": "configurado",
+        "autenticacao": "pendente"
+    }
