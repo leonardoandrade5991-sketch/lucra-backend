@@ -2,7 +2,12 @@
 import os
 import secrets
 import httpx
+from supabase import create_client
 
+supabase = create_client(
+    os.environ["SUPABASE_URL"],
+    os.environ["SUPABASE_SECRET_KEY"]
+)
 from fastapi import FastAPI, Request, HTTPException
 
 app = FastAPI(
