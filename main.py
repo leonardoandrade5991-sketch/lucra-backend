@@ -1,7 +1,8 @@
 
 import os
+import secrets
 import httpx
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Header
 from supabase import create_client
 
 supabase = create_client(
@@ -120,4 +121,74 @@ async def nuvemshop_callback(code: str):
         raise HTTPException(
             status_code=503,
             detail="Falha ao concluir a integracao"
+        )
+        
+@app.get("/nuvemshop/teste-pedidos")
+async def testar_pedidos(
+    chave: str = Header(..., alias="X-Lucra-Install-Key")
+):
+    if not secrets.compare_digest(
+        chave, os.environ["LUCRA_INSTALL_SECRET"]
+    ):
+        raise HTTPException(
+            status_code=403,
+            detail="Acesso nao autorizado"
+        )
+
+    try:
+        integracao = (
+            supabase.table("nuvemshop_integracoes")
+            .select("store_id, access_token")
+            .eq("store_id", 8414927)
+            .single()
+            .execute()
+        )
+
+        dados = integracao.data
+
+        if not dados:
+            raise HTTPException(
+                status_code=404,
+                detail="Loja nao encontrada"
+            )
+
+        async with httpx.AsyncClient(timeout=20.0) as client:
+            resposta = await client.get(
+                f"https://api.nuvemshop.com.br/v1/{dados['store_id']}/orders",
+                headers={
+                    "Authentication": f"bearer {dados['access_token']}",
+                    "User-Agent": "LUCRA (integracao de testes)"
+                },
+                params={"per_page": 5}
+            )
+
+        if resposta.status_code != 200:
+            raise HTTPException(
+                status_code=502,
+                detail=f"Erro na API Nuvemshop: {resposta.status_code}"
+            )
+
+        pedidos = resposta.json()
+
+        return {
+            "sistema": "LUCRA",
+            "loja": dados["store_id"],
+            "quantidade_retornada": len(pedidos),
+            "pedidos": [
+                {
+                    "id": pedido.get("id"),
+                    "numero": pedido.get("number"),
+                    "total": pedido.get("total"),
+                    "status_pagamento": pedido.get("payment_status")
+                }
+                for pedido in pedidos
+            ]
+        }
+
+    except HTTPException:
+        raise
+    except Exception:
+        raise HTTPException(
+            status_code=503,
+            detail="Falha ao consultar pedidos"
         )
