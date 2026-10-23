@@ -112,7 +112,7 @@ async def nuvemshop_callback(code: str):
             status_code=502,
             detail="Falha de comunicacao com a Nuvemshop"
         )
-       except Exception as e:
+    except Exception as e:
         print(
             f"ERRO INTEGRACAO LUCRA: {type(e).__name__}",
             flush=True
