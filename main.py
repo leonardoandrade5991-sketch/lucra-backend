@@ -192,3 +192,104 @@ async def testar_pedidos(
             status_code=503,
             detail="Falha ao consultar pedidos"
         )
+
+@app.get("/dashboard/resumo")
+async def dashboard_resumo(
+    chave: str = Header(..., alias="X-Lucra-Install-Key")
+):
+    if not secrets.compare_digest(
+        chave, os.environ["LUCRA_INSTALL_SECRET"]
+    ):
+        raise HTTPException(
+            status_code=403,
+            detail="Acesso nao autorizado"
+        )
+
+    try:
+        integracao = (
+            supabase.table("nuvemshop_integracoes")
+            .select("store_id, access_token")
+            .eq("store_id", 8414927)
+            .single()
+            .execute()
+        )
+
+        dados = integracao.data
+
+        if not dados:
+            raise HTTPException(
+                status_code=404,
+                detail="Loja nao encontrada"
+            )
+
+        pedidos = []
+        pagina = 1
+
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            while True:
+                resposta = await client.get(
+                    f"https://api.nuvemshop.com.br/v1/{dados['store_id']}/orders",
+                    headers={
+                        "Authentication": f"bearer {dados['access_token']}",
+                        "User-Agent": "LUCRA (integracao de testes)"
+                    },
+                    params={
+                        "per_page": 200,
+                        "page": pagina
+                    }
+                )
+
+                if resposta.status_code != 200:
+                    raise HTTPException(
+                        status_code=502,
+                        detail="Erro ao consultar pedidos"
+                    )
+
+                lote = resposta.json()
+                pedidos.extend(lote)
+
+                if len(lote) < 200:
+                    break
+
+                pagina += 1
+
+                if pagina > 50:
+                    raise HTTPException(
+                        status_code=503,
+                        detail="Limite de consulta atingido"
+                    )
+
+        pedidos_pagos = [
+            pedido for pedido in pedidos
+            if pedido.get("payment_status") == "paid"
+            and pedido.get("status") != "cancelled"
+        ]
+
+        faturamento = sum(
+            float(pedido.get("total") or 0)
+            for pedido in pedidos_pagos
+        )
+
+        quantidade = len(pedidos_pagos)
+
+        ticket_medio = (
+            faturamento / quantidade
+            if quantidade > 0 else 0
+        )
+
+        return {
+            "sistema": "LUCRA",
+            "loja": dados["store_id"],
+            "faturamento": round(faturamento, 2),
+            "pedidos_pagos": quantidade,
+            "ticket_medio": round(ticket_medio, 2),
+            "moeda": "BRL"
+        }
+
+    except HTTPException:
+        raise
+    except Exception:
+        raise HTTPException(
+            status_code=503,
+            detail="Falha ao calcular o resumo"
+        )
