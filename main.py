@@ -1,256 +1,538 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LUCRA — Painel</title>
-<style>
-:root{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#e9edf3;background:#101214;font-synthesis:none}*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button{cursor:pointer}.app{display:flex;min-height:100vh}.sidebar{width:235px;background:#15181b;border-right:1px solid #292d31;padding:25px 16px;flex-shrink:0}.logo{font-size:27px;font-weight:850;letter-spacing:-1.4px;margin:0 12px 35px}.logo b{color:#22b57a}.nav{display:flex;flex-direction:column;gap:7px}.nav button{border:0;background:transparent;color:#a5aeb8;text-align:left;border-radius:10px;padding:13px;font-size:14px}.nav button.active,.nav button:hover{background:#21342c;color:#64d5a3}.sidefoot{color:#7e8792;font-size:12px;margin:32px 12px}.main{width:100%;min-width:0;max-width:1250px;margin:0 auto;padding:32px}.top{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:26px}.top h1{font-size:28px;margin:0 0 5px}.muted{color:#8d97a3}.top p{margin:0;font-size:13px}.controls{display:flex;gap:9px;flex-wrap:wrap}.select,.action{background:#1b1e21;border:1px solid #343a40;color:#e8edf3;border-radius:10px;padding:10px 12px}.action{color:#9fe8c2}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.card{background:#1a1d20;border:1px solid #30353a;border-radius:16px;padding:20px;min-width:0}.kpi .caption{font-size:13px;color:#9ba5af}.kpi .number{font-size:clamp(19px,2.2vw,29px);font-weight:750;margin:14px 0 8px;white-space:nowrap}.hint{font-size:12px;color:#73cfa4}.columns{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:16px;margin-top:18px}.card h2{font-size:17px;margin:0 0 6px}.sub{font-size:12px;color:#8e99a5;margin-bottom:18px}.chart{width:100%;height:220px;display:block}.chartline{fill:none;stroke:#36c58a;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.chartfill{fill:#36c58a;opacity:.1}.gridline{stroke:#30373a;stroke-width:1}.axis{fill:#84909b;font-size:11px}.barwrap{display:flex;align-items:end;gap:14px;height:210px;padding:14px 5px 0}.barcol{flex:1;display:flex;align-items:center;flex-direction:column;justify-content:end;height:100%;gap:10px;font-size:11px;color:#8d97a3}.bar{background:#28ae78;border-radius:6px 6px 0 0;width:min(100%,44px);min-height:3px}.product{display:flex;gap:12px;align-items:center;padding:15px 0;border-top:1px solid #30353a}.photo{height:62px;width:56px;border-radius:9px;background:#292f33;display:grid;place-items:center;font-size:26px;flex-shrink:0}.pinfo{flex:1;min-width:0}.pname{font-weight:650;font-size:13px;margin-bottom:6px}.prevenue{font-size:12px;color:#94a0ac}.qty{font-weight:750;text-align:right}.qty small{display:block;font-size:11px;font-weight:400;color:#89949f;margin-top:5px}.table{width:100%;border-collapse:collapse;font-size:13px}.table td,.table th{padding:13px 7px;text-align:left;border-bottom:1px solid #30353a}.table th{color:#9ca6af;font-weight:500}.pill{display:inline-block;padding:5px 9px;border-radius:30px;background:#21392e;color:#7be3aa;font-size:11px}.hidden{display:none!important}.formrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:15px}.field{display:flex;flex-direction:column;gap:7px;font-size:13px;color:#a8b1bc}.field input{background:#111416;border:1px solid #3b4248;border-radius:9px;color:white;padding:12px;width:100%}.note{font-size:12px;color:#a0aab4;line-height:1.6}.full{margin-top:18px}.mobile-nav{display:none}
-.goal-card{margin-top:18px}.goal-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.goal-head h2{margin:0}.goal-head button{background:transparent;border:1px solid #41494d;border-radius:9px;color:#91e3b7;padding:8px 12px}.goal-main{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:19px 0 12px}.goal-amount{font-size:clamp(21px,3vw,29px);font-weight:750}.goal-percent{font-size:23px;font-weight:750;color:#36c58a}.goal-track{height:12px;border-radius:99px;background:#30373a;overflow:hidden}.goal-progress{height:100%;width:0;background:#36c58a;border-radius:99px;transition:width .2s}.goal-bottom{display:flex;justify-content:space-between;gap:10px;margin-top:11px;color:#a3adb6;font-size:12px}.goal-bottom span:last-child{text-align:right}.goal-edit{display:flex;gap:8px;align-items:center;margin-top:15px;flex-wrap:wrap}.goal-edit input{background:#111416;border:1px solid #3b4248;border-radius:9px;color:#e9edf3;padding:10px;min-width:0}.goal-edit button{background:#235b43;border:0;color:#eafff3;border-radius:9px;padding:10px 14px}.stock-metrics{margin-bottom:15px}.nav-icon{width:19px;height:19px;display:inline-block;vertical-align:middle;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}.nav button{display:flex;align-items:center;gap:11px}.mobile-nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}.mobile-nav .nav-icon{width:21px;height:21px}.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.link-action{background:transparent;border:0;color:#72d7a7;padding:7px 0;font-size:13px;font-weight:650}.product-filter{width:100%;max-width:215px}.stock-detail{font-size:12px;color:#94a0ac;margin-top:5px}.stock-badge{color:#8fe1b5;font-size:12px}.product-empty{color:#a3adb6;font-size:13px;padding:15px 0}.demo-notice{color:#8e99a5;font-size:12px;margin:10px 0 0}
-@media(max-width:950px){.sidebar{width:190px}.main{padding:22px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.columns{grid-template-columns:1fr}}@media(max-width:650px){.app{display:block}.sidebar{display:none}.main{padding:22px 15px 92px}.top{align-items:flex-start;flex-direction:column}.top h1{font-size:25px}.controls{width:100%}.metrics{gap:10px}.card{padding:16px}.kpi .number{font-size:23px;white-space:normal}.columns{gap:12px;margin-top:12px}.mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;background:#171a1d;border-top:1px solid #343a40;justify-content:space-around;padding:10px 3px max(10px,env(safe-area-inset-bottom));z-index:10}.mobile-nav button{background:transparent;border:0;color:#9da7b1;font-size:11px;padding:7px 4px}.mobile-nav button.active{color:#60d7a2}.formrow{grid-template-columns:1fr}.table{font-size:11px}.table td,.table th{padding:10px 4px}.goal-card{margin-top:12px}.goal-bottom{font-size:11px}.stock-metrics .number{font-size:20px}.product-filter{max-width:100%}}
-/* Tema claro nativo */
-html.light{color:#17212b;background:#f5f7f8}html.light .sidebar,html.light .mobile-nav{background:#fff;border-color:#dfe5e8}html.light .card{background:#fff;border-color:#dce3e7}html.light .select,html.light .action{background:#fff;border-color:#dce3e7;color:#1b3430}html.light .nav button.active{background:#e7f5ed;color:#137d55}html.light .goal-track{background:#e5ecea}html.light .product{border-color:#e6e9eb}html.light .photo{background:#edf1f3}html.light .field input,html.light .goal-edit input{background:#fff;color:#17212b;border-color:#ccd5d9}html.light .kpi .caption,html.light .sub,html.light .muted,html.light .note,html.light .prevenue,html.light .stock-detail,html.light .demo-notice{color:#65727d}html.light .nav button,html.light .mobile-nav button{color:#66737d}html.light .mobile-nav button.active{color:#148457}html.light .gridline{stroke:#dce4e6}html.light .axis{fill:#67747d}html.light .table td,html.light .table th{border-color:#e6e9eb}
-.finance-period{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:15px}.finance-period .sub{margin:5px 0 0}.finance-period .field{min-width:185px}.finance-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}.inline-editor,.expense-form{display:flex;align-items:end;gap:10px;flex-wrap:wrap}.inline-editor .field{min-width:200px;max-width:310px;flex:1}.expense-form .field{flex:1;min-width:160px}.primary{background:#229969;border:1px solid #229969;color:white;border-radius:9px;padding:12px 17px;font-weight:650}.primary:hover{background:#197d55}.expense-item,.finance-line{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 0;border-bottom:1px solid #30353a}.expense-title{font-size:13px;font-weight:650}.expense-title small{display:block;color:#9ba5af;font-weight:400;margin-top:5px}.expense-actions{display:flex;gap:7px}.expense-actions button{border:1px solid #41494d;background:transparent;border-radius:8px;color:#9fe8c2;padding:8px;font-size:12px}.finance-line{font-size:13px}.finance-total{color:#75dbaa;font-weight:750}.finance-period input{background:#111416;color:#e9edf3;border:1px solid #3b4248;border-radius:9px;padding:12px;width:100%}html.light .finance-period input{background:#fff;color:#17212b;border-color:#ccd5d9}html.light .expense-item,html.light .finance-line{border-color:#e6e9eb}@media(max-width:950px){.finance-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:650px){.finance-period{align-items:stretch;flex-direction:column}.finance-period .field{min-width:0}.expense-form{align-items:stretch;flex-direction:column}.expense-form .field,.expense-form .primary{width:100%}.inline-editor .field{min-width:0}}
 
-/* LUCRA 0.7 - Pedidos */
-.order-header-top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}.order-header-top h2{margin:0}.order-header-top .sub{margin:6px 0 0}.order-header-top .field{min-width:170px}.order-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:18px}.order-stat{border:1px solid #30373a;border-radius:12px;padding:16px 13px;min-width:0;background:#171b1c}.order-stat span{display:block;font-size:12px;color:#a4b0b3;margin-bottom:9px}.order-stat strong{font-size:20px;letter-spacing:-.5px;overflow-wrap:anywhere}.order-search-label{display:block;margin:16px 0}.orders-list{display:grid;gap:10px}.order-entry{border:1px solid #323a3c;border-radius:12px;overflow:hidden}.order-toggle{display:block;width:100%;text-align:left;background:transparent;border:0;color:inherit;padding:15px}.order-toggle:hover{background:rgba(60,220,135,.045)}.order-top{display:flex;justify-content:space-between;gap:10px;align-items:center}.order-name{color:#a4b0b3;font-size:13px;margin:5px 0 13px}.order-values{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.order-values small{display:block;color:#9eaaae;font-size:11px;margin-bottom:5px}.order-values b{font-size:14px;overflow-wrap:anywhere}.order-view{display:flex;justify-content:flex-end;align-items:center;gap:5px;color:#b3c0c3;font-size:12px;margin-top:12px}.order-details{padding:15px;border-top:1px solid #323a3c;background:#161a1b}.order-details h3{margin:0 0 12px;font-size:14px}.order-detail-line{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #303638;font-size:13px}.order-detail-line:last-child{border:0}.order-detail-line span{color:#a4b0b3}.order-demo-note{font-size:12px;color:#a4b0b3;margin:12px 0 0}html.light .order-stat{background:#f7f9fa;border-color:#e0e6e8}html.light .order-entry{border-color:#e0e6e8}html.light .order-details{background:#f7f9fa;border-color:#e0e6e8}html.light .order-detail-line{border-color:#e0e6e8}html.light .order-name,html.light .order-stat span,html.light .order-values small,html.light .order-detail-line span{color:#65737a}@media(max-width:650px){.order-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.order-stat{padding:13px}.order-stat strong{font-size:18px}.order-values{gap:7px}.order-values b{font-size:12px}.order-header-top .field{min-width:145px}}
+import os
+import re
+import secrets
+from decimal import Decimal, InvalidOperation
 
-/* LUCRA 0.8 - Autenticacao */
-#lucraApp{display:none}body.auth-ready #authScreen{display:none}body.auth-ready #lucraApp{display:flex}
-.auth-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(circle at 50% 0%,#19382b 0%,#101214 48%)}
-.auth-box{width:100%;max-width:430px;background:#1a1d20;border:1px solid #303b36;border-radius:20px;padding:32px;box-shadow:0 18px 60px #0005}
-.auth-brand{text-align:center;font-size:36px;font-weight:850;letter-spacing:-1.5px;margin-bottom:12px}.auth-brand b{color:#22b57a}
-.auth-box h1{font-size:22px;margin:0 0 8px;text-align:center}.auth-intro{color:#9ba7b0;text-align:center;font-size:13px;margin:0 0 23px;line-height:1.5}
-.auth-field{display:block;margin:13px 0;font-size:13px;color:#b5c0c8}.auth-field input{display:block;width:100%;margin-top:7px;padding:13px;background:#111416;color:#e9edf3;border:1px solid #3b4248;border-radius:10px}
-.auth-submit{width:100%;margin-top:10px;background:#229969;color:#fff;border:0;border-radius:10px;padding:13px;font-weight:700}.auth-submit:disabled{opacity:.6;cursor:wait}
-.auth-switch{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:19px}.auth-switch button{background:none;border:0;color:#75dbaa;font-size:13px}
-.auth-message{min-height:22px;margin:13px 0 0;font-size:13px;line-height:1.5;color:#a9e8c6}.auth-message.error{color:#ff9f9f}
-.auth-setup{background:#322b1c;border:1px solid #665632;padding:12px;border-radius:10px;color:#ffe2a0;font-size:12px;line-height:1.6;margin-bottom:15px}
-.auth-signout{border:1px solid #41494d;background:transparent;border-radius:9px;color:#a9e8c6;padding:9px 12px;font-size:12px;margin:12px}
-html.light .auth-screen{background:#eef4f1}html.light .auth-box{background:#fff;border-color:#dce3e7}html.light .auth-field input{background:#fff;color:#17212b;border-color:#ccd5d9}html.light .auth-intro{color:#66737d}
-@media(max-width:650px){.auth-box{padding:24px}.auth-screen{padding:15px}body.auth-ready #lucraApp{display:block}}
-</style>
-</head>
-<body>
-<div id="authScreen" class="auth-screen"><div class="auth-box">
-<div class="auth-brand">LU<b>CRA</b></div>
-<h1 id="authTitle">Entrar na sua conta</h1><p class="auth-intro" id="authIntro">Acesse seu painel com segurança.</p>
-<div id="authSetup" class="auth-setup hidden">Configuração pendente: insira sua chave pública do Supabase no arquivo index.html, na variável SUPABASE_PUBLISHABLE_KEY.</div>
-<form id="authForm">
-<label class="auth-field">E-mail<input id="authEmail" type="email" autocomplete="email" required placeholder="seu@email.com"></label>
-<label class="auth-field" id="authPasswordRow">Senha<input id="authPassword" type="password" minlength="6" autocomplete="current-password" required placeholder="Sua senha"></label>
-<button id="authSubmit" class="auth-submit" type="submit">Entrar</button>
-</form><p id="authMessage" class="auth-message" role="status" aria-live="polite"></p>
-<div class="auth-switch"><button id="authLogin" type="button" class="hidden">Entrar</button><button id="authRegister" type="button">Criar conta</button><button id="authReset" type="button">Esqueci minha senha</button></div>
-</div></div>
-<div id="lucraApp">
-<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true"><symbol id="ico-overview" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol><symbol id="ico-products" viewBox="0 0 24 24"><path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="M3 7v10l9 5 9-5V7M12 12v10"/></symbol><symbol id="ico-orders" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M2 3h2l3 13h12l3-10H5"/></symbol><symbol id="ico-finance" viewBox="0 0 24 24"><path d="M16 7.5C15 6.5 13.5 6 12 6c-2.5 0-4 1.2-4 3 0 4.5 8 1.5 8 6 0 1.8-1.5 3-4 3-1.7 0-3.2-.5-4.2-1.5M12 3v18"/></symbol><symbol id="ico-settings" viewBox="0 0 24 24"><path d="M10.3 2h3.4l.6 2.4 1.8.8 2.1-1.3 2.4 2.4-1.3 2.1.8 1.8 2.4.6v3.4l-2.4.6-.8 1.8 1.3 2.1-2.4 2.4-2.1-1.3-1.8.8-.6 2.4h-3.4l-.6-2.4-1.8-.8-2.1 1.3-2.4-2.4 1.3-2.1-.8-1.8L2 13.7v-3.4l2.4-.6.8-1.8-1.3-2.1 2.4-2.4 2.1 1.3 1.8-.8L10.3 2Z"/><circle cx="12" cy="12" r="3"/></symbol></svg>
-<div class="app"><aside class="sidebar"><div class="logo">LU<b>CRA</b></div><nav class="nav" id="desktopNav"><button data-page="overview" class="active"><svg class="nav-icon"><use href="#ico-overview"/></svg> Visão geral</button><button data-page="products"><svg class="nav-icon"><use href="#ico-products"/></svg> Produtos</button><button data-page="orders"><svg class="nav-icon"><use href="#ico-orders"/></svg> Pedidos</button><button data-page="finance"><svg class="nav-icon"><use href="#ico-finance"/></svg> Financeiro</button><button data-page="settings"><svg class="nav-icon"><use href="#ico-settings"/></svg> Configurações</button></nav><div class="sidefoot">LUCRA • Prévia demonstrativa<br><button type="button" class="auth-signout" data-signout>Sair da conta</button></div></aside>
-<main class="main"><div class="top"><div><h1 id="heading">Visão geral</h1><p class="muted" id="description">Acompanhe o desempenho da sua loja.</p></div><div class="controls"><select class="select" id="period" aria-label="Período"><option value="all">Todo o período</option><option value="7">Últimos 7 dias</option><option value="30">Últimos 30 dias</option></select><button class="action" id="themeBtn" type="button">☼ Tema claro</button></div></div>
-<section id="overview"><div class="metrics"><article class="card kpi"><div class="caption">Faturamento</div><div class="number" id="revenue">R$ 231,90</div><div class="hint">Receita demonstrativa</div></article><article class="card kpi"><div class="caption">Pedidos pagos</div><div class="number" id="paid">2</div><div class="hint">Pedidos de teste</div></article><article class="card kpi"><div class="caption">Ticket médio</div><div class="number" id="ticket">R$ 115,95</div><div class="hint">Por pedido pago</div></article><article class="card kpi"><div class="caption">Lucro estimado</div><div class="number" id="profit">—</div><div class="hint">Configure os custos</div></article></div>
-<article class="card goal-card"><div class="goal-head"><h2>Meta de faturamento</h2><button id="goalEditBtn" type="button">Editar meta</button></div><div class="goal-main"><span class="goal-amount" id="goalAmount">—</span><span class="goal-percent" id="goalPercent">—</span></div><div class="goal-track"><div class="goal-progress" id="goalProgress"></div></div><div class="goal-bottom"><span id="goalEarned">Faturado: —</span><span id="goalRemaining">Restante: —</span></div><div class="goal-edit hidden" id="goalEditor"><label class="field">Meta mensal (R$)<input id="goalInput" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="Ex.: 10000"></label><button id="goalSave" type="button">Salvar meta</button></div><p class="note">Meta demonstrativa. A apuração do faturamento mensal real será integrada à Nuvemshop.</p></article>
-<div class="columns"><article class="card"><h2>Evolução de faturamento</h2><div class="sub">Visualização ilustrativa • dados fictícios</div><svg class="chart" viewBox="0 0 600 220" role="img" aria-label="Gráfico ilustrativo de faturamento"><line class="gridline" x1="30" y1="40" x2="580" y2="40"/><line class="gridline" x1="30" y1="100" x2="580" y2="100"/><line class="gridline" x1="30" y1="160" x2="580" y2="160"/><path class="chartfill" d="M30 173 L130 150 L230 165 L330 90 L430 118 L580 44 L580 190 L30 190Z"/><path class="chartline" d="M30 173 L130 150 L230 165 L330 90 L430 118 L580 44"/><text class="axis" x="30" y="212">Início</text><text class="axis" x="535" y="212">Hoje</text></svg></article><article class="card"><h2>Pedidos por período</h2><div class="sub">Gráfico ilustrativo • dados fictícios</div><div class="barwrap" id="bars"></div></article></div>
-<div class="columns"><article class="card"><div class="card-head"><h2>Produtos mais vendidos</h2><button class="link-action" id="viewAllProducts" type="button">Ver todos →</button></div><div class="sub">Top 3 • dados demonstrativos</div><div id="topProducts"></div></article><article class="card"><h2>Resumo financeiro</h2><div class="sub">Simulação com os custos informados</div><div id="financialSummary"></div></article></div></section>
-<section id="products" class="hidden"><div class="metrics stock-metrics"><article class="card kpi"><div class="caption">Valor em estoque</div><div class="number" id="stockCostTotal">—</div><div class="hint">Custo das unidades disponíveis</div></article><article class="card kpi"><div class="caption">Potencial de vendas</div><div class="number" id="stockSalesTotal">—</div><div class="hint">Receita bruta potencial</div></article></div><article class="card"><div class="card-head"><h2>Todos os produtos</h2><select class="select product-filter" id="productSort" aria-label="Ordenar produtos"><option value="bestsellers">Mais vendidos</option><option value="stock-desc">Maior estoque</option><option value="stock-asc">Menor estoque</option></select></div><p class="sub">Estoque somado entre tamanhos e variações de cada produto.</p><div id="allProducts"></div><p class="demo-notice">Produtos, estoques e preços ilustrativos. A sincronização automática com a Nuvemshop será adicionada depois.</p></article></section>
-<section id="orders" class="hidden">
-<div class="card order-header"><div class="order-header-top"><div><h2>Análise de pedidos</h2><p class="sub">Indicadores do mês selecionado</p></div><label class="field">Mês<select id="ordersMonth" aria-label="Mês dos pedidos"></select></label></div>
-<div class="order-metrics"><div class="order-stat"><span>Ticket médio</span><strong id="ordTicket">—</strong></div><div class="order-stat"><span>Itens por pedido</span><strong id="ordItems">—</strong></div><div class="order-stat"><span>Frete médio</span><strong id="ordShipping">—</strong></div><div class="order-stat"><span>Lucro médio</span><strong id="ordProfit">—</strong></div></div><p class="note" id="ordersNote">Carregando pedidos da Nuvemshop...</p></div>
-<div class="card"><div class="order-header-top"><div><h2>Lista de pedidos</h2><p class="sub">Toque em um pedido para consultar seus detalhes.</p></div><span class="muted" style="font-size:12px">Pedidos da Nuvemshop</span></div><label class="field order-search-label">Buscar pedido ou cliente<input id="ordersSearch" placeholder="Número do pedido ou nome do cliente" autocomplete="off"></label><div id="ordersList" class="orders-list"></div></div>
-</section>
-<section id="finance" class="hidden">
-<div class="card finance-period"><div><h2>Resumo mensal</h2><p class="sub">Selecione o mês para consultar ou atualizar os valores.</p></div><label class="field">Mês de referência<input type="month" id="financeMonth" value="2026-10"></label></div>
-<div class="metrics finance-metrics">
-<article class="card kpi"><div class="caption">Faturamento</div><div class="number" id="finRevenue">—</div></article>
-<article class="card kpi"><div class="caption">Custo dos produtos vendidos</div><div class="number" id="finProducts">—</div></article>
-<article class="card kpi"><div class="caption">Gastos com anúncios</div><div class="number" id="finAds">—</div></article>
-<article class="card kpi"><div class="caption">Custos com frete</div><div class="number" id="finShipping">—</div></article>
-<article class="card kpi"><div class="caption">Gastos fixos mensais</div><div class="number" id="finFixed">R$ 0,00</div></article>
-<article class="card kpi"><div class="caption">Outras despesas</div><div class="number" id="finOthers">—</div></article>
-<article class="card kpi"><div class="caption">Lucro estimado</div><div class="number" id="profitDetail">—</div></article>
-<article class="card kpi"><div class="caption">Margem estimada</div><div class="number" id="margin">—</div></article>
-</div>
-<div class="card full"><h2>Gastos com anúncios</h2><p class="sub">Informe o valor <strong>total acumulado</strong> no mês. Ao atualizar, o novo valor substitui o anterior.</p><div class="inline-editor"><label class="field">Total mensal (R$)<input id="adsCost" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0,00"></label><button class="primary" id="saveAds" type="button">Salvar valor</button></div></div>
-<div class="card full"><div class="card-head"><h2>Gastos fixos mensais</h2><span class="muted" style="font-size:12px">Repetem todo mês</span></div><p class="sub">Cadastre uma vez. Os valores passam a valer no mês escolhido e nos próximos; alterações futuras preservam os meses anteriores.</p><div id="fixedList"></div><div class="expense-form"><label class="field">Categoria<input id="fixedCategory" maxlength="70" placeholder="Ex.: Plataforma, aluguel"></label><label class="field">Valor mensal (R$)<input id="fixedValue" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0,00"></label><button class="primary" id="addFixed" type="button">Adicionar</button></div><p class="note" id="fixedError" role="status"></p></div>
-<div class="card full"><h2>Custos com frete</h2><p class="sub">Será calculado automaticamente somando os valores de frete informados no checkout dos pedidos pagos do mês. Sem preenchimento manual.</p><div class="finance-line"><span>Total do frete no mês</span><strong id="shippingDetail">Aguardando integração</strong></div></div>
-<div class="card full"><div class="card-head"><h2>Outras despesas</h2><span class="muted" style="font-size:12px">Categorias livres</span></div><p class="sub">Crie categorias com qualquer nome. Você poderá editar ou excluir os valores do mês.</p><div class="expense-list" id="expenseList"></div><div class="expense-form"><label class="field">Categoria<input id="expenseCategory" maxlength="70" placeholder="Ex.: Embalagens, aluguel, aplicativos"></label><label class="field">Valor mensal (R$)<input id="expenseValue" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0,00"></label><button class="primary" id="addExpense" type="button">Adicionar</button></div><p class="note" id="expenseError" role="status"></p></div>
-<div class="card full"><h2>Custo dos produtos vendidos</h2><p class="sub">Campo provisório até a integração dos custos reais dos produtos. Informe o custo total dos itens vendidos no mês.</p><div class="inline-editor"><label class="field">Custo mensal (R$)<input id="monthlyProductCost" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0,00"></label><button class="primary" id="saveProductCost" type="button">Salvar valor</button></div></div>
-<div class="card full"><h2>Resumo financeiro do mês</h2><div id="financeBreakdown"></div><p class="note">Prévia demonstrativa: o faturamento de R$ 231,90 representa dois pedidos de teste sem datas importadas e não pode ser atribuído com segurança a um mês. Por isso, lucro e margem mensais ficam indisponíveis até a conexão dos pedidos com datas. Os custos são armazenados somente neste navegador.</p></div>
-</section>
-<section id="settings" class="hidden"><div class="card"><h2>Sua conta</h2><p class="sub" id="accountEmail">Conta autenticada</p><button type="button" class="action" data-signout>Sair da conta</button></div><div class="card"><h2>Integrações</h2><p class="sub">Nuvemshop • backend de testes configurado separadamente</p><p class="note">A aba Pedidos consulta a API autenticada. Produtos e gráficos ainda são demonstrativos. A integração de custos e demais indicadores está em desenvolvimento.</p></div><div class="card full"><h2>Sobre o LUCRA</h2><p class="note">Versão visual 0.9 • pedidos reais via API autenticada. Produtos e gráficos continuam demonstrativos; custos e lucro aguardam integração.</p></div></section>
-</main></div><nav class="mobile-nav" id="mobileNav"><button data-page="overview" class="active"><svg class="nav-icon"><use href="#ico-overview"/></svg><div>Início</div></button><button data-page="products"><svg class="nav-icon"><use href="#ico-products"/></svg><div>Produtos</div></button><button data-page="orders"><svg class="nav-icon"><use href="#ico-orders"/></svg><div>Pedidos</div></button><button data-page="finance"><svg class="nav-icon"><use href="#ico-finance"/></svg><div>Financeiro</div></button><button data-page="settings"><svg class="nav-icon"><use href="#ico-settings"/></svg><div>Ajustes</div></button></nav></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script>
+import httpx
+from fastapi import FastAPI, Header, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
+from supabase import create_client
 
-// Configuracao publica do Supabase (NUNCA cole secret key/service_role aqui).
-const SUPABASE_URL='https://dwbonmchyoqboeaedbpc.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY='sb_publishable_CAm534D9DH4mZKi7enLp9Q_AyU9eIfm';
-let lucraAuth=null;
-let authMode='login';
-const authMessage=document.getElementById('authMessage');
-const authForm=document.getElementById('authForm');
-const authSubmit=document.getElementById('authSubmit');
-function authNotice(msg,error=false){authMessage.textContent=msg;authMessage.classList.toggle('error',error)}
-function setAuthMode(mode){
- authMode=mode;authNotice('');
- document.getElementById('authTitle').textContent=mode==='login'?'Entrar na sua conta':mode==='register'?'Criar sua conta':'Recuperar senha';
- document.getElementById('authIntro').textContent=mode==='login'?'Acesse seu painel com segurança.':mode==='register'?'Cadastre-se com seu e-mail para começar.':'Enviaremos um link de recuperação para seu e-mail.';
- document.getElementById('authPasswordRow').classList.toggle('hidden',mode==='reset');
- document.getElementById('authPassword').required=mode!=='reset';
- document.getElementById('authPassword').autocomplete=mode==='register'?'new-password':'current-password';
- authSubmit.textContent=mode==='login'?'Entrar':mode==='register'?'Criar conta':'Enviar link';
- document.getElementById('authLogin').classList.toggle('hidden',mode==='login');
- document.getElementById('authRegister').classList.toggle('hidden',mode==='register');
- document.getElementById('authReset').classList.toggle('hidden',mode==='reset');
-}
-document.getElementById('authLogin').addEventListener('click',()=>setAuthMode('login'));
-document.getElementById('authRegister').addEventListener('click',()=>setAuthMode('register'));
-document.getElementById('authReset').addEventListener('click',()=>setAuthMode('reset'));
-function showAuthenticated(session){
- document.body.classList.toggle('auth-ready',!!session);
- document.getElementById('accountEmail').textContent=session?.user?.email||'Conta autenticada';
- queueMicrotask(()=>{if(session?.access_token){loadOrders()}else{++ordersRequest;liveOrders=[];orderResponse=null;ordersError='';ordersLoading=false;renderOrders()}})
-}
-const configured=SUPABASE_PUBLISHABLE_KEY.startsWith('sb_publishable_')&&!!window.supabase?.createClient;
-if(!configured){document.getElementById('authSetup').classList.remove('hidden');authSubmit.disabled=true;authNotice('Configure a chave pública para habilitar o login.',true)}
-else{
- lucraAuth=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
- lucraAuth.auth.onAuthStateChange((_event,session)=>showAuthenticated(session));
- lucraAuth.auth.getSession().then(({data,error})=>{if(error)authNotice('Não foi possível recuperar a sessão.',true);showAuthenticated(data?.session||null)}).catch(()=>authNotice('Falha ao conectar ao Supabase.',true));
-}
-authForm.addEventListener('submit',async e=>{
- e.preventDefault();if(!lucraAuth)return;
- const email=document.getElementById('authEmail').value.trim();
- const password=document.getElementById('authPassword').value;
- authSubmit.disabled=true;authNotice('Aguarde...');
- try{
-  if(authMode==='login'){
-   const {error}=await lucraAuth.auth.signInWithPassword({email,password});
-   if(error)throw error;
-   authNotice('Login realizado.');
-  }else if(authMode==='register'){
-   const {data,error}=await lucraAuth.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname}});
-   if(error)throw error;
-   authNotice(data?.session?'Conta criada e acesso liberado.':'Cadastro recebido! Confira seu e-mail e confirme a conta antes de entrar.');
-  }else{
-   const {error}=await lucraAuth.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
-   if(error)throw error;
-   authNotice('Se o e-mail estiver cadastrado, você receberá as instruções de recuperação.');
-  }
- }catch(err){authNotice(err?.message||'Não foi possível concluir a solicitação.',true)}
- finally{authSubmit.disabled=false}
-});
-document.querySelectorAll('[data-signout]').forEach(btn=>btn.addEventListener('click',async()=>{
- if(!lucraAuth)return;
- const {error}=await lucraAuth.auth.signOut();
- if(error){alert('Não foi possível sair da conta.');return}
- showAuthenticated(null);setAuthMode('login');
-}));
-// O acesso aos dados reais ainda precisa de validacao JWT e autorizacao por loja no backend.
+SUPABASE_URL = os.environ["SUPABASE_URL"].rstrip("/")
+SUPABASE_PUBLISHABLE_KEY = os.environ["SUPABASE_PUBLISHABLE_KEY"]
+supabase = create_client(
+    SUPABASE_URL,
+    os.environ["SUPABASE_SECRET_KEY"]
+)
 
-const money=n=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(n);
-// Apenas dados ilustrativos: a API de produtos ainda não está conectada.
-const products=[
-  {id:1,name:'Produto de demonstração 01',revenue:142,qty:1,stock:2,cost:50,price:142},
-  {id:2,name:'Produto de demonstração 02',revenue:89.9,qty:1,stock:10,cost:45,price:89.9},
-  {id:3,name:'Produto de demonstração 03',revenue:0,qty:0,stock:5,cost:30,price:79.9},
-  {id:4,name:'Produto de demonstração 04',revenue:0,qty:0,stock:0,cost:60,price:129.9}
-];
-function productMarkup(p,showStock=false){return `<div class="product"><div class="photo" aria-hidden="true">👕</div><div class="pinfo"><div class="pname">${p.name}</div><div class="prevenue">Faturamento: ${money(p.revenue)}</div>${showStock?`<div class="stock-detail">Estoque total: <span class="stock-badge">${p.stock} ${p.stock===1?'unidade':'unidades'}</span> · Preço: ${money(p.price)}</div>`:''}</div><div class="qty">${p.qty}<small>${p.qty===1?'vendida':'vendidas'}</small></div></div>`}
-function bySales(a,b){return b.qty-a.qty||b.revenue-a.revenue||a.id-b.id}
-function renderTopProducts(){const sold=products.filter(p=>p.qty>0).sort(bySales).slice(0,3);document.getElementById('topProducts').innerHTML=sold.length?sold.map(p=>productMarkup(p)).join(''):'<p class="product-empty">Nenhum produto vendido no período.</p>'}
-function renderProducts(){const sort=document.getElementById('productSort').value;const ordered=[...products];if(sort==='stock-desc')ordered.sort((a,b)=>b.stock-a.stock||bySales(a,b));else if(sort==='stock-asc')ordered.sort((a,b)=>a.stock-b.stock||bySales(a,b));else ordered.sort(bySales);document.getElementById('allProducts').innerHTML=ordered.map(p=>productMarkup(p,true)).join('')}
-function renderStockTotals(){const cost=products.reduce((sum,p)=>sum+p.stock*p.cost,0);const sales=products.reduce((sum,p)=>sum+p.stock*p.price,0);document.getElementById('stockCostTotal').textContent=money(cost);document.getElementById('stockSalesTotal').textContent=money(sales)}
-renderTopProducts();renderProducts();renderStockTotals();document.getElementById('productSort').addEventListener('change',renderProducts);
-const barData=[25,45,35,70,55,90,65];document.getElementById('bars').innerHTML=barData.map((n,i)=>`<div class="barcol"><div class="bar" style="height:${n}%"></div><span>${['S','T','Q','Q','S','S','D'][i]}</span></div>`).join('');
-const titles={overview:['Visão geral','Acompanhe o desempenho da sua loja.'],products:['Produtos','Consulte seus produtos e acompanhe o estoque.'],orders:['Pedidos','Consulte os pedidos da sua loja.'],finance:['Financeiro','Acompanhe custos e despesas por mês.'],settings:['Configurações','Gerencie as preferências do LUCRA.']};
-function navigate(page){for(const key of Object.keys(titles))document.getElementById(key).classList.toggle('hidden',key!==page);document.getElementById('heading').textContent=titles[page][0];document.getElementById('description').textContent=titles[page][1];document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));window.scrollTo(0,0)}document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));document.getElementById('viewAllProducts').addEventListener('click',()=>{document.getElementById('productSort').value='bestsellers';renderProducts();navigate('products')});
+NUVEMSHOP_CLIENT_ID = os.environ["NUVEMSHOP_CLIENT_ID"]
+NUVEMSHOP_CLIENT_SECRET = os.environ["NUVEMSHOP_CLIENT_SECRET"]
 
-// Pedidos reais: apenas JWT de sessao do Supabase; nunca usar chaves privadas no navegador.
-const LUCRA_API='https://lucra-backend.onrender.com';
-const orderMonth=document.getElementById('ordersMonth');
-const now=new Date();for(let i=0;i<18;i++){const d=new Date(now.getFullYear(),now.getMonth()-i,1);const value=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');const label=d.toLocaleDateString('pt-BR',{month:'long',year:'numeric'});orderMonth.add(new Option(label.charAt(0).toUpperCase()+label.slice(1),value))}
-let liveOrders=[];
-let orderResponse=null;
-let ordersLoading=false;
-let ordersError='';
-let ordersRequest=0;
-function orderDetailLine(label,value){return `<div class="order-detail-line"><span>${label}</span><strong>${value}</strong></div>`}
-function orderMetric(id,value){document.getElementById(id).textContent=value}
-function renderOrders(){
- const search=document.getElementById('ordersSearch').value.trim().toLocaleLowerCase('pt-BR');
- const data=liveOrders.filter(o=>String(o.numero??o.id??'').includes(search)||String(o.cliente||'').toLocaleLowerCase('pt-BR').includes(search));
- orderMetric('ordTicket',orderResponse?money(orderResponse.ticket_medio||0):'—');
- orderMetric('ordItems',orderResponse?Number(orderResponse.itens_por_pedido||0).toLocaleString('pt-BR',{maximumFractionDigits:2}):'—');
- orderMetric('ordShipping',orderResponse?money(orderResponse.frete_medio||0):'—');
- orderMetric('ordProfit','Custo pendente');
- document.getElementById('ordersNote').textContent=ordersLoading?'Consultando os pedidos reais...':ordersError|| (orderResponse?`${orderResponse.quantidade_pedidos} pedido(s) pago(s) em ${orderResponse.mes}. Custos e taxas ainda não integrados; lucro indisponível.`:'Entre na sua conta para consultar pedidos.');
- document.getElementById('ordersList').innerHTML=ordersLoading?'<p class="note">Carregando pedidos...</p>':ordersError?'<p class="note">Não foi possível carregar os pedidos. Verifique a mensagem acima e tente selecionar o mês novamente.</p>':!orderResponse?'<p class="note">Aguardando conexão com a Nuvemshop.</p>':!data.length?'<p class="note">Nenhum pedido pago encontrado para este mês ou busca.</p>':data.map(o=>{
-  const numero=escapeHTML(o.numero??o.id??'—');
-  const cliente=escapeHTML(o.cliente||'Cliente não informado');
-  const produtos=Array.isArray(o.produtos)?o.produtos:[];
-  return `<div class="order-entry"><button type="button" class="order-toggle" aria-expanded="false"><div class="order-top"><strong>Pedido #${numero}</strong><span class="pill">Pago</span></div><div class="order-name">${cliente}</div><div class="order-values"><div><small>Valor pago</small><b>${money(o.valor_pago||0)}</b></div><div><small>Custo produtos</small><b>Pendente</b></div><div><small>Lucro do pedido</small><b>Pendente</b></div></div><div class="order-view">Ver detalhes <span aria-hidden="true">⌄</span></div></button><div class="order-details hidden"><h3>Detalhes do pedido #${numero}</h3>${orderDetailLine('Cliente',cliente)}${orderDetailLine('Itens',String(o.quantidade_itens||0))}${produtos.map(p=>orderDetailLine(escapeHTML(p.nome||'Produto')+' × '+Number(p.quantidade||0),money((p.preco_unitario||0)*(p.quantidade||0))+' (venda)')).join('')}${orderDetailLine('Valor pago',money(o.valor_pago||0))}${orderDetailLine('Frete registrado no checkout',money(o.frete_checkout||0))}${orderDetailLine('Desconto (informativo)',money(o.desconto||0))}${orderDetailLine('Custo dos produtos','Pendente')}${orderDetailLine('Taxas','Pendente')}${orderDetailLine('Lucro antes de despesas mensais','Pendente')}<p class="order-demo-note">Valores reais da Nuvemshop. O valor pago já inclui descontos; não subtraí-los novamente. Frete exibido é o valor registrado no checkout, não necessariamente o custo pago à transportadora.</p></div></div>`;
- }).join('');
-}
-async function loadOrders(){
- const request=++ordersRequest;
- ordersLoading=true;ordersError='';orderResponse=null;liveOrders=[];renderOrders();
- try{
-  if(!lucraAuth)throw new Error('Autenticação não configurada.');
-  const {data,error}=await lucraAuth.auth.getSession();
-  if(error||!data?.session?.access_token)throw new Error('Faça login novamente para consultar seus pedidos.');
-  const token=data.session.access_token;
-  const lojasResp=await fetch(LUCRA_API+'/minhas-lojas',{headers:{Authorization:'Bearer '+token}});
-  if(!lojasResp.ok)throw new Error(lojasResp.status===401?'Sessão expirada. Faça login novamente.':'Não foi possível verificar as lojas vinculadas.');
-  const lojasData=await lojasResp.json();
-  const lojas=Array.isArray(lojasData.lojas)?lojasData.lojas:[];
-  if(!lojas.length)throw new Error('Nenhuma loja vinculada a esta conta.');
-  if(lojas.length>1)throw new Error('Esta conta tem várias lojas. A seleção de loja será adicionada na próxima etapa.');
-  const url=LUCRA_API+'/me/pedidos?mes='+encodeURIComponent(orderMonth.value)+'&loja_id='+encodeURIComponent(lojas[0].id);
-  const resp=await fetch(url,{headers:{Authorization:'Bearer '+token}});
-  if(!resp.ok){let detail='';try{detail=(await resp.json()).detail||''}catch(e){}throw new Error(resp.status===401?'Sessão expirada. Faça login novamente.':resp.status===403?'Sua conta não tem permissão para acessar esta loja.':detail||'Erro ao consultar pedidos ('+resp.status+').')}
-  const result=await resp.json();
-  if(request!==ordersRequest)return;
-  if(result.mes!==orderMonth.value)throw new Error('A API retornou um mês diferente do selecionado.');
-  orderResponse=result;liveOrders=Array.isArray(result.pedidos)?result.pedidos:[];
- }catch(e){if(request!==ordersRequest)return;ordersError=e.message||'Falha ao carregar pedidos.'}
- finally{if(request===ordersRequest){ordersLoading=false;renderOrders()}}
-}
-document.getElementById('ordersSearch').addEventListener('input',renderOrders);
-orderMonth.addEventListener('change',loadOrders);
-document.getElementById('ordersList').addEventListener('click',e=>{const btn=e.target.closest('.order-toggle');if(!btn)return;const detail=btn.nextElementSibling;const open=detail.classList.toggle('hidden')===false;btn.setAttribute('aria-expanded',String(open));btn.querySelector('.order-view').innerHTML=open?'Ocultar detalhes ⌃':'Ver detalhes ⌄'});
-renderOrders();
+app = FastAPI(title="LUCRA API", version="0.9.0")
 
-const financeMonth=document.getElementById('financeMonth');
-const finKey='lucra_finance_v05';let financeData={};try{financeData=JSON.parse(localStorage.getItem(finKey)||'{}')||{}}catch(e){financeData={}}
-const fixedKey='lucra_fixed_v06';let fixedData=[];try{fixedData=JSON.parse(localStorage.getItem(fixedKey)||'[]')||[]}catch(e){fixedData=[]}
-const validMoney=v=>v!==''&&Number.isFinite(Number(v))&&Number(v)>=0;
-function currentFinance(){const m=financeMonth.value;if(!financeData[m])financeData[m]={ads:null,products:null,expenses:[]};if(!Array.isArray(financeData[m].expenses))financeData[m].expenses=[];return financeData[m]}
-function persistFinance(){try{localStorage.setItem(finKey,JSON.stringify(financeData))}catch(e){alert('Não foi possível salvar os dados neste navegador.')}}
-function persistFixed(){try{localStorage.setItem(fixedKey,JSON.stringify(fixedData))}catch(e){alert('Não foi possível salvar os dados neste navegador.')}}
-function escapeHTML(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\u0027':'&#39;'}[c]))}
-function activeFixed(month){return fixedData.map((item,i)=>({...item,index:i,version:[...(item.versions||[])].filter(v=>v.month<=month).sort((a,b)=>b.month.localeCompare(a.month))[0]})).filter(item=>item.version&&!item.version.deleted)}
-function renderFinance(){const f=currentFinance(),month=financeMonth.value;
-document.getElementById('adsCost').value=f.ads??'';
-document.getElementById('monthlyProductCost').value=f.products??'';
-const ads=f.ads===null?null:Number(f.ads),pc=f.products===null?null:Number(f.products),other=f.expenses.reduce((n,e)=>n+Number(e.amount),0),active=activeFixed(month),fixed=active.reduce((n,e)=>n+Number(e.version.amount),0);
-document.getElementById('finRevenue').textContent='—';document.getElementById('finProducts').textContent=pc===null?'—':money(pc);document.getElementById('finAds').textContent=ads===null?'—':money(ads);document.getElementById('finShipping').textContent='—';document.getElementById('finFixed').textContent=money(fixed);document.getElementById('finOthers').textContent=money(other);document.getElementById('profitDetail').textContent='—';document.getElementById('margin').textContent='—';document.getElementById('profit').textContent='—';
-document.getElementById('financialSummary').innerHTML='<p class="note">O resultado mensal estará disponível após sincronizar os pedidos com suas datas.</p>';
-document.getElementById('financeBreakdown').innerHTML=`<div class="finance-line"><span>Faturamento do mês</span><strong>—</strong></div><div class="finance-line"><span>Custo dos produtos vendidos</span><strong>${pc===null?'Não informado':money(pc)}</strong></div><div class="finance-line"><span>Gastos com anúncios</span><strong>${ads===null?'Não informado':money(ads)}</strong></div><div class="finance-line"><span>Custos com frete</span><strong>Aguardando integração</strong></div><div class="finance-line"><span>Gastos fixos mensais</span><strong>${money(fixed)}</strong></div><div class="finance-line"><span>Outras despesas</span><strong>${money(other)}</strong></div><div class="finance-line finance-total"><span>Lucro estimado</span><strong>Indisponível</strong></div>`;
-document.getElementById('fixedList').innerHTML=active.length?active.map(e=>`<div class="expense-item"><div class="expense-title">${escapeHTML(e.category)}<small>${money(e.version.amount)} / mês</small></div><div class="expense-actions"><button type="button" data-fixed-edit="${e.index}">Editar</button><button type="button" data-fixed-remove="${e.index}">Excluir</button></div></div>`).join(''):'<p class="note">Nenhum gasto fixo ativo neste mês.</p>';
-document.getElementById('expenseList').innerHTML=f.expenses.length?f.expenses.map((e,i)=>`<div class="expense-item"><div class="expense-title">${escapeHTML(e.category)}<small>${money(e.amount)}</small></div><div class="expense-actions"><button type="button" data-edit="${i}">Editar</button><button type="button" data-remove="${i}">Excluir</button></div></div>`).join(''):'<p class="note">Nenhuma outra despesa cadastrada neste mês.</p>';
-}
-function saveMonthly(field,input){const v=document.getElementById(input).value;if(!validMoney(v)){alert('Informe um valor válido, igual ou maior que zero.');return}currentFinance()[field]=Number(v);persistFinance();renderFinance()}
-document.getElementById('saveAds').addEventListener('click',()=>saveMonthly('ads','adsCost'));document.getElementById('saveProductCost').addEventListener('click',()=>saveMonthly('products','monthlyProductCost'));
-document.getElementById('addFixed').addEventListener('click',()=>{const c=document.getElementById('fixedCategory').value.trim(),v=document.getElementById('fixedValue').value,err=document.getElementById('fixedError');if(!c||!validMoney(v)){err.textContent='Informe uma categoria e um valor válido.';return}fixedData.push({category:c,versions:[{month:financeMonth.value,amount:Number(v),deleted:false}]});persistFixed();document.getElementById('fixedCategory').value='';document.getElementById('fixedValue').value='';err.textContent='';renderFinance()});
-document.getElementById('fixedList').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const idx=b.dataset.fixedEdit??b.dataset.fixedRemove;if(idx===undefined)return;const item=fixedData[Number(idx)],month=financeMonth.value;if(!item)return;
-if(b.dataset.fixedRemove!==undefined){if(!confirm('Encerrar este gasto fixo a partir do mês selecionado? Os meses anteriores serão mantidos.'))return;item.versions=item.versions.filter(v=>v.month!==month);item.versions.push({month,amount:0,deleted:true})}
-else{const c=prompt('Categoria:',item.category);if(c===null)return;if(!c.trim()){alert('A categoria não pode ficar vazia.');return}const current=activeFixed(month).find(v=>v.index===Number(idx));const raw=prompt('Valor mensal (R$):',String(current?.version.amount??0));if(raw===null)return;const v=raw.trim().replace(',','.');if(!validMoney(v)){alert('Informe um valor válido.');return}item.category=c.trim();item.versions=item.versions.filter(v=>v.month!==month);item.versions.push({month,amount:Number(v),deleted:false})}
-persistFixed();renderFinance()});
-document.getElementById('addExpense').addEventListener('click',()=>{const c=document.getElementById('expenseCategory').value.trim(),v=document.getElementById('expenseValue').value,err=document.getElementById('expenseError');if(!c||!validMoney(v)){err.textContent='Informe uma categoria e um valor válido.';return}currentFinance().expenses.push({category:c,amount:Number(v)});persistFinance();document.getElementById('expenseCategory').value='';document.getElementById('expenseValue').value='';err.textContent='';renderFinance()});
-document.getElementById('expenseList').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const f=currentFinance();if(b.dataset.remove!==undefined){f.expenses.splice(Number(b.dataset.remove),1);persistFinance();renderFinance()}else if(b.dataset.edit!==undefined){const item=f.expenses[Number(b.dataset.edit)];const name=prompt('Categoria:',item.category);if(name===null)return;const trimmed=name.trim();if(!trimmed){alert('A categoria não pode ficar vazia.');return}const amount=prompt('Valor mensal (R$):',String(item.amount));if(amount===null)return;const normalized=amount.trim().replace(',','.');if(!validMoney(normalized)){alert('Informe um valor válido.');return}item.category=trimmed;item.amount=Number(normalized);persistFinance();renderFinance()}});
-financeMonth.addEventListener('change',()=>{if(financeMonth.value)renderFinance()});renderFinance();
-document.getElementById('period').addEventListener('change',e=>{const label=e.target.value==='all'?'Todo o período':e.target.value==='7'?'Últimos 7 dias':'Últimos 30 dias';document.querySelector('#overview .kpi .hint').textContent='Receita demonstrativa • '+label;});
-let light=false;try{light=localStorage.getItem('lucra_theme')==='light'}catch(e){}function applyTheme(){document.documentElement.classList.toggle('light',light);document.getElementById('themeBtn').textContent=light?'☾ Tema escuro':'☼ Tema claro'}applyTheme();document.getElementById('themeBtn').addEventListener('click',()=>{light=!light;applyTheme();try{localStorage.setItem('lucra_theme',light?'light':'dark')}catch(e){}});
-const demoRevenue=231.9;const goalEditor=document.getElementById('goalEditor');const goalInput=document.getElementById('goalInput');let goalValue=0;try{goalValue=Math.max(0,Number(localStorage.getItem('lucra_goal')||0))||0}catch(e){}
-function updateGoal(){const valid=goalValue>0;const pct=valid?demoRevenue/goalValue*100:0;document.getElementById('goalAmount').textContent=valid?money(goalValue):'Defina sua meta';document.getElementById('goalPercent').textContent=valid?pct.toFixed(1).replace('.',',')+'%':'—';document.getElementById('goalProgress').style.width=Math.min(100,Math.max(0,pct))+'%';document.getElementById('goalEarned').textContent='Faturado (demo): '+money(demoRevenue);document.getElementById('goalRemaining').textContent=valid?'Faltam '+money(Math.max(0,goalValue-demoRevenue)):'Meta não configurada'}
-document.getElementById('goalEditBtn').addEventListener('click',()=>{goalEditor.classList.toggle('hidden');goalInput.value=goalValue||''});document.getElementById('goalSave').addEventListener('click',()=>{const value=Number(goalInput.value);if(!Number.isFinite(value)||value<=0){alert('Informe uma meta maior que zero.');return}goalValue=value;try{localStorage.setItem('lucra_goal',String(value))}catch(e){}goalEditor.classList.add('hidden');updateGoal()});updateGoal();
-</script></body></html>
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://lucra-frontend.onrender.com"],
+    allow_credentials=False,
+    allow_methods=["GET"],
+    allow_headers=["Authorization", "Content-Type"],
+)
+
+
+def numero(valor):
+    try:
+        return Decimal(str(valor if valor is not None else "0"))
+    except (ValueError, TypeError, InvalidOperation):
+        return Decimal("0")
+
+
+def dinheiro(valor):
+    return float(round(numero(valor), 2))
+
+
+def verificar_chave(chave):
+    segredo = os.environ.get("LUCRA_INSTALL_SECRET", "")
+    if not segredo or not secrets.compare_digest(chave, segredo):
+        raise HTTPException(403, "Acesso nao autorizado")
+
+
+def obter_integracao(store_id):
+    try:
+        resposta = (
+            supabase.table("nuvemshop_integracoes")
+            .select("store_id, access_token")
+            .eq("store_id", int(store_id))
+            .limit(1)
+            .execute()
+        )
+    except Exception:
+        raise HTTPException(503, "Falha ao consultar integracao")
+
+    if not resposta.data:
+        raise HTTPException(404, "Integracao nao encontrada")
+
+    return resposta.data[0]
+
+
+def loja_teste():
+    return int(os.environ.get("LUCRA_TEST_STORE_ID", "8414927"))
+
+
+async def usuario_autenticado(authorization):
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(401, "Login necessario")
+
+    token = authorization[7:].strip()
+
+    if not token:
+        raise HTTPException(401, "Token ausente")
+
+    try:
+        async with httpx.AsyncClient(timeout=15.0) as client:
+            resposta = await client.get(
+                f"{SUPABASE_URL}/auth/v1/user",
+                headers={
+                    "apikey": SUPABASE_PUBLISHABLE_KEY,
+                    "Authorization": f"Bearer {token}"
+                }
+            )
+    except httpx.RequestError:
+        raise HTTPException(503, "Servico de autenticacao indisponivel")
+
+    if resposta.status_code != 200:
+        raise HTTPException(401, "Sessao invalida ou expirada")
+
+    try:
+        usuario = resposta.json()
+    except ValueError:
+        raise HTTPException(502, "Resposta de autenticacao invalida")
+
+    if not usuario.get("id"):
+        raise HTTPException(401, "Usuario nao identificado")
+
+    return usuario["id"]
+
+
+def lojas_do_usuario(usuario_id):
+    try:
+        vinculos = (
+            supabase.table("usuarios_lojas")
+            .select("loja_id, papel")
+            .eq("usuario_id", usuario_id)
+            .execute()
+        ).data or []
+
+        if not vinculos:
+            return []
+
+        ids = [v["loja_id"] for v in vinculos]
+
+        lojas = (
+            supabase.table("lojas")
+            .select("id, nome, nuvemshop_store_id")
+            .in_("id", ids)
+            .execute()
+        ).data or []
+
+        papeis = {v["loja_id"]: v["papel"] for v in vinculos}
+
+        return [
+            {
+                "id": loja["id"],
+                "nome": loja["nome"],
+                "nuvemshop_store_id": loja["nuvemshop_store_id"],
+                "papel": papeis.get(loja["id"])
+            }
+            for loja in lojas
+        ]
+    except Exception:
+        raise HTTPException(503, "Falha ao consultar permissoes")
+
+
+async def consultar_pedidos(integracao):
+    pedidos = []
+
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        for pagina in range(1, 52):
+            try:
+                resposta = await client.get(
+                    f"https://api.nuvemshop.com.br/v1/{integracao['store_id']}/orders",
+                    headers={
+                        "Authentication": f"bearer {integracao['access_token']}",
+                        "User-Agent": "LUCRA (integracao de testes)"
+                    },
+                    params={"per_page": 200, "page": pagina}
+                )
+            except httpx.RequestError:
+                raise HTTPException(502, "Falha de comunicacao com a Nuvemshop")
+
+            if resposta.status_code != 200:
+                raise HTTPException(
+                    502,
+                    f"Erro ao consultar Nuvemshop: {resposta.status_code}"
+                )
+
+            try:
+                lote = resposta.json()
+            except ValueError:
+                raise HTTPException(502, "Resposta invalida da Nuvemshop")
+
+            if not isinstance(lote, list):
+                raise HTTPException(502, "Formato inesperado de pedidos")
+
+            pedidos.extend(lote)
+
+            if len(lote) < 200:
+                return pedidos
+
+    raise HTTPException(503, "Limite de paginacao atingido")
+
+
+def pedidos_validos(pedidos):
+    return [
+        p for p in pedidos
+        if p.get("payment_status") == "paid"
+        and p.get("status") != "cancelled"
+    ]
+
+
+def nome_cliente(pedido):
+    cliente = pedido.get("customer") or {}
+
+    nome = pedido.get("contact_name") or cliente.get("name")
+
+    if nome:
+        return str(nome)
+
+    nome = " ".join(
+        str(cliente.get(c) or "").strip()
+        for c in ("first_name", "last_name")
+    ).strip()
+
+    return nome or "Cliente nao informado"
+
+
+def data_pedido(pedido):
+    return pedido.get("created_at") or pedido.get("date_created") or ""
+
+
+def pertence_ao_mes(pedido, mes):
+    data = data_pedido(pedido)
+    return isinstance(data, str) and data[:7] == mes
+
+
+def produto_formatado(produto):
+    nome = produto.get("name")
+
+    if isinstance(nome, dict):
+        nome = nome.get("pt") or next(iter(nome.values()), "")
+
+    return {
+        "produto_id": produto.get("product_id"),
+        "variante_id": produto.get("variant_id"),
+        "nome": str(nome or "Produto"),
+        "quantidade": int(produto.get("quantity") or 0),
+        "preco_unitario": dinheiro(produto.get("price")),
+        "sku": produto.get("sku")
+    }
+
+
+def pedido_formatado(pedido):
+    produtos = [
+        produto_formatado(p)
+        for p in (pedido.get("products") or [])
+    ]
+
+    return {
+        "id": pedido.get("id"),
+        "numero": pedido.get("number"),
+        "cliente": nome_cliente(pedido),
+        "data": data_pedido(pedido),
+        "status_pagamento": pedido.get("payment_status"),
+        "valor_pago": dinheiro(pedido.get("total")),
+        "frete_checkout": dinheiro(
+            pedido.get("shipping_cost_customer")
+        ),
+        "desconto": dinheiro(pedido.get("discount")),
+        "subtotal": dinheiro(pedido.get("subtotal")),
+        "quantidade_itens": sum(
+            p["quantidade"] for p in produtos
+        ),
+        "produtos": produtos,
+        "custo_produtos": None,
+        "taxas": None,
+        "lucro_pedido": None,
+        "lucro_status": "pendente_custos_e_taxas"
+    }
+
+
+def resumo_pedidos(pedidos, store_id, mes):
+    pedidos = [
+        pedido_formatado(p)
+        for p in pedidos_validos(pedidos)
+        if pertence_ao_mes(p, mes)
+    ]
+
+    pedidos.sort(
+        key=lambda p: p["data"],
+        reverse=True
+    )
+
+    quantidade = len(pedidos)
+
+    total = sum(
+        (numero(p["valor_pago"]) for p in pedidos),
+        Decimal("0")
+    )
+
+    fretes = sum(
+        (numero(p["frete_checkout"]) for p in pedidos),
+        Decimal("0")
+    )
+
+    itens = sum(
+        p["quantidade_itens"] for p in pedidos
+    )
+
+    return {
+        "sistema": "LUCRA",
+        "loja": store_id,
+        "mes": mes,
+        "quantidade_pedidos": quantidade,
+        "faturamento": dinheiro(total),
+        "ticket_medio": dinheiro(total / quantidade)
+        if quantidade else 0,
+        "itens_por_pedido": round(itens / quantidade, 2)
+        if quantidade else 0,
+        "frete_medio": dinheiro(fretes / quantidade)
+        if quantidade else 0,
+        "frete_total": dinheiro(fretes),
+        "lucro_medio": None,
+        "pedidos": pedidos,
+        "aviso": "Custos e taxas ainda nao integrados."
+    }
+
+
+def validar_mes(mes):
+    if not re.fullmatch(r"\d{4}-(0[1-9]|1[0-2])", mes):
+        raise HTTPException(422, "Mes invalido. Use AAAA-MM")
+
+
+@app.get("/")
+def home():
+    return {
+        "sistema": "LUCRA",
+        "status": "online",
+        "versao": "0.9.0"
+    }
+
+
+@app.get("/healthz")
+def health_check():
+    return {"status": "ok"}
+
+
+@app.get("/supabase/status")
+def supabase_status():
+    try:
+        supabase.table("lojas").select("id").limit(1).execute()
+        return {
+            "sistema": "LUCRA",
+            "banco": "Supabase",
+            "conexao": "funcionando"
+        }
+    except Exception:
+        raise HTTPException(503, "Falha na conexao com banco")
+
+
+@app.get("/nuvemshop/status")
+def nuvemshop_status():
+    return {
+        "sistema": "LUCRA",
+        "integracao": "Nuvemshop",
+        "callback": "configurado",
+        "autenticacao": "habilitada_para_teste"
+    }
+
+
+@app.get("/nuvemshop/callback")
+async def nuvemshop_callback(code: str):
+    try:
+        async with httpx.AsyncClient(timeout=20.0) as client:
+            resposta = await client.post(
+                "https://www.nuvemshop.com.br/apps/authorize/token",
+                json={
+                    "client_id": NUVEMSHOP_CLIENT_ID,
+                    "client_secret": NUVEMSHOP_CLIENT_SECRET,
+                    "grant_type": "authorization_code",
+                    "code": code
+                }
+            )
+
+        if resposta.status_code != 200:
+            raise HTTPException(502, "Falha na autorizacao Nuvemshop")
+
+        dados = resposta.json()
+        token = dados.get("access_token")
+        store_id = dados.get("user_id")
+
+        if not token or not store_id:
+            raise HTTPException(502, "Autorizacao incompleta")
+
+        supabase.table("nuvemshop_integracoes").upsert(
+            {
+                "store_id": int(store_id),
+                "access_token": token,
+                "scope": str(dados.get("scope") or "")
+            },
+            on_conflict="store_id"
+        ).execute()
+
+        return {
+            "sistema": "LUCRA",
+            "integracao": "Nuvemshop",
+            "status": "loja_conectada",
+            "store_id": store_id
+        }
+
+    except HTTPException:
+        raise
+    except httpx.RequestError:
+        raise HTTPException(502, "Falha de comunicacao")
+    except Exception:
+        raise HTTPException(503, "Falha ao concluir integracao")
+
+
+# ROTAS ADMINISTRATIVAS ANTIGAS
+# Exigem a chave privada de instalacao.
+
+
+@app.get("/nuvemshop/teste-pedidos")
+async def testar_pedidos(
+    chave: str = Header(..., alias="X-Lucra-Install-Key")
+):
+    verificar_chave(chave)
+    integracao = obter_integracao(loja_teste())
+    pedidos = await consultar_pedidos(integracao)
+
+    return {
+        "sistema": "LUCRA",
+        "loja": integracao["store_id"],
+        "quantidade_retornada": min(len(pedidos), 5),
+        "pedidos": [
+            {
+                "id": p.get("id"),
+                "numero": p.get("number"),
+                "total": p.get("total"),
+                "status_pagamento": p.get("payment_status")
+            }
+            for p in pedidos[:5]
+        ]
+    }
+
+
+@app.get("/dashboard/resumo")
+async def dashboard_resumo(
+    chave: str = Header(..., alias="X-Lucra-Install-Key")
+):
+    verificar_chave(chave)
+    integracao = obter_integracao(loja_teste())
+    pedidos = pedidos_validos(
+        await consultar_pedidos(integracao)
+    )
+
+    faturamento = sum(
+        (numero(p.get("total")) for p in pedidos),
+        Decimal("0")
+    )
+
+    quantidade = len(pedidos)
+
+    return {
+        "sistema": "LUCRA",
+        "loja": integracao["store_id"],
+        "faturamento": dinheiro(faturamento),
+        "pedidos_pagos": quantidade,
+        "ticket_medio": dinheiro(faturamento / quantidade)
+        if quantidade else 0,
+        "moeda": "BRL"
+    }
+
+
+@app.get("/pedidos")
+async def listar_pedidos_admin(
+    mes: str = Query(...),
+    chave: str = Header(..., alias="X-Lucra-Install-Key")
+):
+    verificar_chave(chave)
+    validar_mes(mes)
+    integracao = obter_integracao(loja_teste())
+
+    return resumo_pedidos(
+        await consultar_pedidos(integracao),
+        integracao["store_id"],
+        mes
+    )
+
+
+# NOVAS ROTAS COM AUTENTICACAO SUPABASE
+
+
+@app.get("/minhas-lojas")
+async def minhas_lojas(
+    authorization: str = Header(default="")
+):
+    usuario_id = await usuario_autenticado(authorization)
+
+    return {
+        "sistema": "LUCRA",
+        "lojas": lojas_do_usuario(usuario_id)
+    }
+
+
+@app.get("/me/pedidos")
+async def meus_pedidos(
+    mes: str = Query(...),
+    loja_id: str = Query(default=None),
+    authorization: str = Header(default="")
+):
+    validar_mes(mes)
+
+    usuario_id = await usuario_autenticado(authorization)
+    lojas = lojas_do_usuario(usuario_id)
+
+    if not lojas:
+        raise HTTPException(
+            403,
+            "Nenhuma loja vinculada a sua conta"
+        )
+
+    if loja_id:
+        autorizadas = [
+            loja for loja in lojas
+            if str(loja["id"]) == loja_id
+        ]
+
+        if not autorizadas:
+            raise HTTPException(
+                403,
+                "Voce nao tem acesso a esta loja"
+            )
+
+        loja = autorizadas[0]
+
+    else:
+        if len(lojas) != 1:
+            raise HTTPException(
+                400,
+                "Selecione uma loja usando loja_id"
+            )
+
+        loja = lojas[0]
+
+    if not loja.get("nuvemshop_store_id"):
+        raise HTTPException(
+            404,
+            "Loja sem identificador Nuvemshop"
+        )
+
+    integracao = obter_integracao(
+        loja["nuvemshop_store_id"]
+    )
+
+    return resumo_pedidos(
+        await consultar_pedidos(integracao),
+        integracao["store_id"],
+        mes
+    )
